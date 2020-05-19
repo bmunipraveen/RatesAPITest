@@ -1,5 +1,6 @@
 package steps;
 
+import POJO.RatesPOJO;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -14,13 +15,15 @@ import java.util.Date;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 
 public class RatesAPISteps {
     String pattern = "yyyy-MM-dd";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
     String date = simpleDateFormat.format(new Date());
+
+
     public static String futureDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
@@ -95,9 +98,17 @@ public class RatesAPISteps {
     }
 
     @When("The API for Future date Foreign Exchange rates is available")
-    public void theAPIForFutureDateForeignExchangeRatesIsAvailable() throws Throwable{
-       BDDStyleCode.executePathParameter(date,200);
-       BDDStyleCode.executePathParameter(futureDate(), 200);
+    public void theAPIForFutureDateForeignExchangeRatesIsAvailable() throws Throwable {
+        BDDStyleCode.executePathParameter(date, 200);
+        BDDStyleCode.executePathParameter(futureDate(), 200);
     }
 
+    @Then("validate the status today vs future")
+    public void validateTheStatusTodayVsFuture() throws Throwable {
+        var response = BDDStyleCode.executeGetPathParamResponse(date, 200).getBody().as(RatesPOJO.class);
+        var response1 = BDDStyleCode.executeGetPathParamResponse(futureDate(), 200).getBody().as(RatesPOJO.class);
+        assertThat(response1.getBase(), equalTo(response.getBase()));
+        assertThat(response1.getDate(), equalTo(response.getDate()));
+        assertThat(response1.getClass(),equalToObject(response.getClass()));
+    }
 }

@@ -24,7 +24,7 @@ Feature: verify different GET operations for RatesAPI
   Scenario: Rates API for Future date Foreign Exchange rates
     Given Rates API for Future date Foreign Exchange rates
     When The API for Future date Foreign Exchange rates is available
-    Then validate the status
+    Then validate the status today vs future
 
   Scenario: Rates API for Specific date Foreign Exchange rates
     Given Rates API for Specific date Foreign Exchange rates
