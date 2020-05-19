@@ -78,7 +78,7 @@ public class RatesAPISteps {
 
     @When("The Base for Specific date Foreign Exchange rates is available")
     public void theBaseForSpecificDateForeignExchangeRatesIsAvailable() {
-        BDDStyleCode.executePathAndQueryParameter("2020-05-19", "base", "EUR");
+        BDDStyleCode.executePathAndQueryParameter(date, "base", "EUR");
     }
 
     @Given("I perform GET operation for {string}")
