@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.*;
 
 
 public class RatesAPISteps {
+
     String pattern = "yyyy-MM-dd";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
     String date = simpleDateFormat.format(new Date());
@@ -99,14 +100,16 @@ public class RatesAPISteps {
 
     @When("The API for Future date Foreign Exchange rates is available")
     public void theAPIForFutureDateForeignExchangeRatesIsAvailable() throws Throwable {
-        BDDStyleCode.executePathParameter(date, 200);
         BDDStyleCode.executePathParameter(futureDate(), 200);
+
     }
 
     @Then("validate the status today vs future")
     public void validateTheStatusTodayVsFuture() throws Throwable {
         var response = BDDStyleCode.executeGetPathParamResponse(date, 200).getBody().as(RatesPOJO.class);
         var response1 = BDDStyleCode.executeGetPathParamResponse(futureDate(), 200).getBody().as(RatesPOJO.class);
+        assertThat(response,notNullValue());
+        assertThat(response1,notNullValue());
         assertThat(response1.getBase(), equalTo(response.getBase()));
         assertThat(response1.getDate(), equalTo(response.getDate()));
         assertThat(response1.getClass(),equalToObject(response.getClass()));
